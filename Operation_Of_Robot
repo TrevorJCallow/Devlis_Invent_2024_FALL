@@ -1,0 +1,137 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cstdlib>  // For rand() and srand()
+#include <ctime>    // For time()
+
+// Class representing a Place in the Petri net
+class Place {
+public:
+    std::string name;
+    int tokens;
+
+    Place(const std::string& name, int tokens = 0) : name(name), tokens(tokens) {}
+};
+
+// Class representing a Transition in the Petri net
+class Transition {
+public:
+    std::string name;
+    std::vector<Place*> inputPlaces;
+    std::vector<Place*> outputPlaces;
+    double failureProbability;
+
+    Transition(const std::string& name, double failureProbability = 0.0) : name(name), failureProbability(failureProbability) {}
+
+    // Check if the transition is enabled (all input places have at least one token)
+    bool isEnabled() {
+        for (auto& place : inputPlaces) {
+            if (place->tokens == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Fire the transition (move tokens from input places to output places)
+    bool fire() {
+        if (isEnabled()) {
+            // Simulate failure
+            if (failureProbability > 0.0) {
+                double randomValue = static_cast<double>(rand()) / RAND_MAX;
+                if (randomValue < failureProbability) {
+                    std::cout << "Transition '" << name << "': Robot is stuck!\n";
+                    return false;  // Transition failed due to robot getting stuck
+                }
+            }
+
+            std::cout << "Transition '" << name << "' is firing.\n";
+            for (auto& place : inputPlaces) {
+                place->tokens--;
+            }
+            for (auto& place : outputPlaces) {
+                place->tokens++;
+            }
+            return true;
+        } else {
+            std::cout << "Transition '" << name << "' is not enabled.\n";
+            return false;
+        }
+    }
+};
+
+int main() {
+    // Initialize random number generator
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Define the places
+    Place p1("Baggage on Conveyor", 5);  // Initial tokens representing baggage items
+    Place p2("Robot Ready", 1);          // Robot is initially ready
+    Place p3("Baggage with Robot", 0);
+    Place p4("Baggage Loaded", 0);
+    Place p5("Robot Stuck", 0);          // Robot stuck state
+
+    // Define the transitions
+    Transition t1("Robot Picks Up Baggage", 0.1);  // 10% chance to get stuck
+    t1.inputPlaces = {&p1, &p2};
+    t1.outputPlaces = {&p3};
+
+    Transition t2("Robot Loads Baggage into Aircraft", 0.1);  // 10% chance to get stuck
+    t2.inputPlaces = {&p3};
+    t2.outputPlaces = {&p4, &p2};
+
+    // Simulate the Petri net
+    int steps = 10;  // Number of simulation steps
+    bool robotStuck = false;
+    for (int i = 0; i < steps; ++i) {
+        std::cout << "\n--- Step " << i + 1 << " ---\n";
+        std::cout << "Current Tokens:\n";
+        std::cout << p1.name << ": " << p1.tokens << "\n";
+        std::cout << p2.name << ": " << p2.tokens << "\n";
+        std::cout << p3.name << ": " << p3.tokens << "\n";
+        std::cout << p4.name << ": " << p4.tokens << "\n";
+        std::cout << p5.name << ": " << p5.tokens << "\n";
+
+        if (p5.tokens > 0) {
+            std::cout << "Robot is stuck. Simulation terminated.\n";
+            break;
+        }
+
+        // Try to fire transitions in order
+        if (!robotStuck && t1.fire()) {
+            // Transition t1 fired successfully
+        } else if (!robotStuck && p5.tokens == 0) {
+            std::cout << "Transition '" << t1.name << "' could not fire.\n";
+        } else if (p5.tokens > 0) {
+            robotStuck = true;
+            std::cout << "Robot is stuck after attempting to pick up baggage.\n";
+            break;
+        }
+
+        if (!robotStuck && t2.fire()) {
+            // Transition t2 fired successfully
+        } else if (!robotStuck && p5.tokens == 0) {
+            std::cout << "Transition '" << t2.name << "' could not fire.\n";
+        } else if (p5.tokens > 0) {
+            robotStuck = true;
+            std::cout << "Robot is stuck after attempting to load baggage.\n";
+            break;
+        }
+    }
+
+    std::cout << "\nFinal State:\n";
+    std::cout << p1.name << ": " << p1.tokens << "\n";
+    std::cout << p2.name << ": " << p2.tokens << "\n";
+    std::cout << p3.name << ": " << p3.tokens << "\n";
+    std::cout << p4.name << ": " << p4.tokens << "\n";
+    std::cout << p5.name << ": " << p5.tokens << "\n";
+
+    if (p5.tokens > 0) {
+        std::cout << "Robot is stuck. Please perform maintenance.\n";
+    } else {
+        std::cout << "All baggage loaded successfully.\n";
+    }
+
+    return 0;
+}
+
