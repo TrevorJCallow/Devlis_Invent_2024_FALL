@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports - Luggage Robot Dashboard</title>
+    <!-- Link to CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts and Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="Logo" class="logo">
+            <h2>Planeitizer</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+            <li><a href="robot_control.html"><i class="fas fa-robot"></i>Robot Control</a></li>
+            <li><a href="bag_placement.html"><i class="fas fa-box"></i>Bag Placement</a></li>
+            <li><a href="reports.html" class="active"><i class="fas fa-chart-bar"></i>Reports</a></li>
+            <li><a href="maintenance.html"><i class="fas fa-tools"></i>Maintenance</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header>
+            <div class="header-title">
+                <h1>Reports</h1>
+            </div>
+            <div class="user-profile">
+                <img src="user-avatar.png" alt="User Avatar">
+                <span>John Doe</span>
+            </div>
+        </header>
+
+        <!-- Reports Content -->
+        <div class="content">
+            <!-- Gate Information -->
+            <div class="gate-info">
+                <h2>Reports for Gate 4</h2>
+            </div>
+
+            <!-- Total Bags and Weight -->
+            <div class="report-summary">
+                <h2>Bag Summary</h2>
+                <p><strong>Total Bags:</strong> 20</p>
+                <p id="total-weight"><strong>Total Weight:</strong> 0 lbs</p>
+            </div>
+
+            <!-- Weight Distribution Chart -->
+            <div class="chart-container">
+                <h2>Weight Distribution</h2>
+                <canvas id="weightChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Planeitizer. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Chart.js Script -->
+    <script>
+        // Ensure the script runs after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example data for 20 bags (weights in lbs)
+            const bagWeights = [
+                51, 40, 48, 42, 70, 44, 55, 46, 50, 57,
+                38, 44, 51, 42, 48, 53, 59, 64, 46, 52
+            ];
+
+            // Calculate total weight
+            const totalWeight = bagWeights.reduce((a, b) => a + b, 0);
+
+            // Update total weight display
+            document.getElementById('total-weight').innerHTML = `<strong>Total Weight:</strong> ${totalWeight} lbs`;
+
+            // Create labels for the bags
+            const bagLabels = bagWeights.map((_, index) => `Bag ${index + 1}`);
+
+            // Create the chart
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            const weightChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: bagLabels,
+                    datasets: [{
+                        label: 'Bag Weight (lbs)',
+                        data: bagWeights,
+                        backgroundColor: 'rgba(52, 152, 219, 0.6)',
+                        borderColor: 'rgba(41, 128, 185, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 80,
+                            title: {
+                                display: true,
+                                text: 'Weight (lbs)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bag Number'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Weight Distribution Across Bags'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

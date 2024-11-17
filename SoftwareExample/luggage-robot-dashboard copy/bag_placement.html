@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bag Placement - Luggage Robot Dashboard</title>
+    <!-- Link to CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="Logo" class="logo">
+            <h2>Planeitizer</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+            <li><a href="robot_control.html"><i class="fas fa-robot"></i>Robot Control</a></li>
+            <!-- Removed Bag Scanning Link -->
+            <li><a href="bag_placement.html" class="active"><i class="fas fa-box"></i>Bag Placement</a></li>
+            <li><a href="reports.html"><i class="fas fa-chart-bar"></i>Reports</a></li>
+            <li><a href="maintenance.html"><i class="fas fa-tools"></i>Maintenance</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header>
+            <div class="header-title">
+                <h1>Bag Placement</h1>
+            </div>
+            <div class="user-profile">
+                <img src="user-avatar.png" alt="User Avatar">
+                <span>John Doe</span>
+            </div>
+        </header>
+
+        <!-- Bag Placement Content -->
+        <div class="content">
+            <!-- Accessible Logs Section -->
+            <div class="logs-section">
+                <h2>Bag Processing Logs</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Bag Number</th>
+                            <th>Status</th>
+                            <th>Weight (lbs)</th>
+                            <th>Action</th>
+                            <th>Fragile/Oversized</th>
+                            <th>Location Array</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Example Logs for 20 Bags -->
+                        <!-- Convert kg to lbs (1 kg = 2.20462 lbs) -->
+                        <!-- Bag 1 (Fragile) -->
+                        <tr>
+                            <td data-label="ID">001</td>
+                            <td data-label="Bag Number">1</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">51.8</td>
+                            <td data-label="Action">Bag picked up</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array (n1)">[A1, B2, C3]</td>
+                        </tr>
+                        <!-- Continue for other bags with converted weights -->
+                        <!-- Bag 2 -->
+                        <tr>
+                            <td data-label="ID">002</td>
+                            <td data-label="Bag Number">2</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">40.1</td>
+                            <td data-label="Action">Bag dropped off</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array (n1)">[A1, B2, D4]</td>
+                        </tr>
+                        <!-- Bag 3 -->
+                        <tr>
+                            <td data-label="ID">003</td>
+                            <td data-label="Bag Number">3</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">48.5</td>
+                            <td data-label="Action">Bag picked up</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array (n1)">[A2, B3, C4]</td>
+                        </tr>
+                        <!-- Bag 4 -->
+                        <tr>
+                            <td data-label="ID">004</td>
+                            <td data-label="Bag Number">4</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">43.0</td>
+                            <td data-label="Action">Bag dropped off</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array (n1)">[A2, B3, D5]</td>
+                        </tr>
+                        <!-- Bag 5 (Oversized) -->
+                        <tr>
+                            <td data-label="ID">005</td>
+                            <td data-label="Bag Number">5</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">70.5</td>
+                            <td data-label="Action">Bag picked up</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array (n1)">[A3, B4, C5]</td>
+                        </tr>
+                        <!-- Continue for bags 6 to 20 -->
+                        <!-- ... -->
+                        <!-- Bag 20 -->
+                        <tr>
+                            <td data-label="ID">020</td>
+                            <td data-label="Bag Number">20</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">52.9</td>
+                            <td data-label="Action">Bag dropped off</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array (n1)">[A10, B11, C12]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Planeitizer. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
