@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Luggage Robot Dashboard</title>
+    <!-- Link to CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="Logo" class="logo">
+            <h2>LugBot</h2> <!-- Changed from Planeitizer to LugBot -->
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+            <li><a href="robot_control.html"><i class="fas fa-robot"></i>Robot Control</a></li>
+            <!-- Removed Bag Scanning Link -->
+            <li><a href="bag_placement.html"><i class="fas fa-box"></i>Bag Placement</a></li>
+            <li><a href="reports.html"><i class="fas fa-chart-bar"></i>Reports</a></li>
+            <li><a href="maintenance.html"><i class="fas fa-tools"></i>Maintenance</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header>
+            <div class="header-title">
+                <h1>Dashboard</h1>
+            </div>
+            <div class="user-profile">
+                <img src="user-avatar.png" alt="User Avatar" class="avatar">
+                <span>John Doe</span>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="content">
+            <!-- Gate Information -->
+            <div class="gate-info">
+                <h2>Welcome to Gate 4</h2>
+            </div>
+
+            <!-- Cards -->
+            <div class="cards">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-luggage-cart"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>Total Bags</h3>
+                        <p>120</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-weight-hanging"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>Total Weight</h3>
+                        <p>6,250 lbs</p>
+                    </div>
+                </div>
+                <!-- Removed Battery Level Card -->
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>Alerts</h3>
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Robot Status Section -->
+            <div class="robot-status">
+                <h2>Robot Status</h2>
+                <p><strong>Current Task:</strong> Idle</p>
+                <p><strong>Location:</strong> Docking Station</p>
+                <p><strong>Status:</strong> Operational</p>
+            </div>
+
+            <!-- Alerts Section -->
+            <div class="alerts-section">
+                <h2>Alerts and Notifications</h2>
+                <ul>
+                    <!-- Info Notifications -->
+                    <li class="info"><i class="fas fa-info-circle"></i> LugBot#1 has been turned on</li> <!-- Changed from Planetizer#1 to LugBot#1 -->
+                    <li class="info"><i class="fas fa-info-circle"></i> Started Task: Loading Luggage</li>
+                    
+                    <!-- Success Notification -->
+                    <li class="success"><i class="fas fa-info-circle"></i> LugBot#1 has completed loading</li> <!-- Changed from Planetizer#1 to LugBot#1 -->
+                    
+                    <!-- Existing Alerts -->
+                    <li><i class="fas fa-check-circle"></i> Completed Task</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 LugBot. All rights reserved.</p> <!-- Changed from Planeitizer to LugBot -->
+        </footer>
+    </div>
+</body>
+</html>

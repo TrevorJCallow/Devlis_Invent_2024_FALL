@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bag Placement - LugBot</title>
+    <!-- Link to CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Responsive Meta Tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="Logo" class="logo">
+            <h2>LugBot</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+            <li><a href="robot_control.html"><i class="fas fa-robot"></i>Robot Control</a></li>
+            <!-- Removed Bag Scanning Link -->
+            <li><a href="bag_placement.html" class="active"><i class="fas fa-box"></i>Bag Placement</a></li>
+            <li><a href="reports.html"><i class="fas fa-chart-bar"></i>Reports</a></li>
+            <li><a href="maintenance.html"><i class="fas fa-tools"></i>Maintenance</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header>
+            <div class="header-title">
+                <h1>Bag Placement</h1>
+            </div>
+            <div class="user-profile">
+                <img src="user-avatar.png" alt="User Avatar">
+                <span>John Doe</span>
+            </div>
+        </header>
+
+        <!-- Bag Placement Content -->
+        <div class="content">
+            <!-- Search Feature -->
+            <div class="search-feature">
+                <form id="searchForm" onsubmit="event.preventDefault();" aria-label="Search Bag by ID">
+                    <label for="searchInput" class="search-label">Search Bag by ID:</label>
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" name="searchInput" placeholder="e.g., SW1000000001" maxlength="12" pattern="SW\d{10}" title="Enter a valid RFID ID starting with 'SW' followed by 10 digits." aria-required="true">
+                        <button type="submit" class="search-button" disabled><i class="fas fa-search"></i> Search</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Accessible Logs Section -->
+            <div class="logs-section">
+                <h2>Bag Processing Logs</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Bag Number</th>
+                            <th>Status</th>
+                            <th>Weight (lbs)</th>
+                            <th>Action</th>
+                            <th>Fragile/Oversized</th>
+                            <th>Location Array</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Example Logs for 6 Sectors (5 Bags per Sector) -->
+                        
+                        <!-- Sector: Forward Left (FL) -->
+                        <!-- Bag 1 -->
+                        <tr>
+                            <td data-label="ID">SW1000000001</td>
+                            <td data-label="Bag Number">1</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">50.0</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[P1]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000002</td>
+                            <td data-label="Bag Number">1</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">50.0</td>
+                            <td data-label="Action">Bag placed in storage compartment FL1</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[FC1, A1, B2]</td>
+                        </tr>
+                        <!-- Bag 2 -->
+                        <tr>
+                            <td data-label="ID">SW1000000003</td>
+                            <td data-label="Bag Number">2</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">45.5</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[P1]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000004</td>
+                            <td data-label="Bag Number">2</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">45.5</td>
+                            <td data-label="Action">Bag placed in storage compartment FL2</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FL1, A1, B3]</td>
+                        </tr>
+                        <!-- Bag 3 -->
+                        <tr>
+                            <td data-label="ID">SW1000000005</td>
+                            <td data-label="Bag Number">3</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">60.2</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[P1]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000006</td>
+                            <td data-label="Bag Number">3</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">60.2</td>
+                            <td data-label="Action">Bag placed in storage compartment FL3</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[FO1, A2, B4]</td>
+                        </tr>
+                        <!-- Bag 4 -->
+                        <tr>
+                            <td data-label="ID">SW1000000007</td>
+                            <td data-label="Bag Number">4</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">48.0</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[P1]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000008</td>
+                            <td data-label="Bag Number">4</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">48.0</td>
+                            <td data-label="Action">Bag placed in storage compartment FL4</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FL1, A2, B5]</td>
+                        </tr>
+                        <!-- Bag 5 -->
+                        <tr>
+                            <td data-label="ID">SW1000000009</td>
+                            <td data-label="Bag Number">5</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">55.5</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[P1]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000010</td>
+                            <td data-label="Bag Number">5</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">55.5</td>
+                            <td data-label="Action">Bag placed in storage compartment FL5</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[F1, A3, B6]</td>
+                        </tr>
+                        
+                        <!-- Sector: Forward Center (FC) -->
+                        <!-- Bag 6 -->
+                        <tr>
+                            <td data-label="ID">SW1000000011</td>
+                            <td data-label="Bag Number">6</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">42.3</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FC, A4, B7]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000012</td>
+                            <td data-label="Bag Number">6</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">42.3</td>
+                            <td data-label="Action">Bag placed in storage compartment FC1</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FL1, A4, B7]</td>
+                        </tr>
+                        <!-- Bag 7 -->
+                        <tr>
+                            <td data-label="ID">SW1000000013</td>
+                            <td data-label="Bag Number">7</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">49.0</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FC, A4, B8]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000014</td>
+                            <td data-label="Bag Number">7</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">49.0</td>
+                            <td data-label="Action">Bag placed in storage compartment FC2</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FC2, A4, B8]</td>
+                        </tr>
+                        <!-- Bag 8 -->
+                        <tr>
+                            <td data-label="ID">SW1000000015</td>
+                            <td data-label="Bag Number">8</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">53.5</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[FC, A5, B9]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000016</td>
+                            <td data-label="Bag Number">8</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">53.5</td>
+                            <td data-label="Action">Bag placed in storage compartment FC3</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[FC3, A5, B9]</td>
+                        </tr>
+                        <!-- Bag 9 -->
+                        <tr>
+                            <td data-label="ID">SW1000000017</td>
+                            <td data-label="Bag Number">9</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">47.8</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FC, A5, B10]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000018</td>
+                            <td data-label="Bag Number">9</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">47.8</td>
+                            <td data-label="Action">Bag placed in storage compartment FC4</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FC4, A5, B10]</td>
+                        </tr>
+                        <!-- Bag 10 -->
+                        <tr>
+                            <td data-label="ID">SW1000000019</td>
+                            <td data-label="Bag Number">10</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">50.7</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[FC, A6, B11]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000020</td>
+                            <td data-label="Bag Number">10</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">50.7</td>
+                            <td data-label="Action">Bag placed in storage compartment FC5</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[FC5, A6, B11]</td>
+                        </tr>
+                        
+                        <!-- Sector: Forward Right (FR) -->
+                        <!-- Bag 11 -->
+                        <tr>
+                            <td data-label="ID">SW1000000021</td>
+                            <td data-label="Bag Number">11</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">46.0</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FR, A7, B12]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000022</td>
+                            <td data-label="Bag Number">11</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">46.0</td>
+                            <td data-label="Action">Bag placed in storage compartment FR1</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FR1, A7, B12]</td>
+                        </tr>
+                        <!-- Bag 12 -->
+                        <tr>
+                            <td data-label="ID">SW1000000023</td>
+                            <td data-label="Bag Number">12</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">52.5</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[FR, A8, B13]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000024</td>
+                            <td data-label="Bag Number">12</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">52.5</td>
+                            <td data-label="Action">Bag placed in storage compartment FR2</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[FR2, A8, B13]</td>
+                        </tr>
+                        <!-- Bag 13 -->
+                        <tr>
+                            <td data-label="ID">SW1000000025</td>
+                            <td data-label="Bag Number">13</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">49.0</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FR, A8, B14]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000026</td>
+                            <td data-label="Bag Number">13</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">49.0</td>
+                            <td data-label="Action">Bag placed in storage compartment FR3</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FR3, A8, B14]</td>
+                        </tr>
+                        <!-- Bag 14 -->
+                        <tr>
+                            <td data-label="ID">SW1000000027</td>
+                            <td data-label="Bag Number">14</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">44.5</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FR, A9, B15]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000028</td>
+                            <td data-label="Bag Number">14</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">44.5</td>
+                            <td data-label="Action">Bag placed in storage compartment FR4</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[FR4, A9, B15]</td>
+                        </tr>
+                        <!-- Bag 15 -->
+                        <tr>
+                            <td data-label="ID">SW1000000029</td>
+                            <td data-label="Bag Number">15</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">58.3</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[FR, A10, B16]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000030</td>
+                            <td data-label="Bag Number">15</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">58.3</td>
+                            <td data-label="Action">Bag placed in storage compartment FR5</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[FR5, A10, B16]</td>
+                        </tr>
+                        
+                        <!-- Sector: Rear Left (RL) -->
+                        <!-- Bag 16 -->
+                        <tr>
+                            <td data-label="ID">SW1000000031</td>
+                            <td data-label="Bag Number">16</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">47.5</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RL, A11, B17]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000032</td>
+                            <td data-label="Bag Number">16</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">47.5</td>
+                            <td data-label="Action">Bag placed in storage compartment RL1</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RL1, A11, B17]</td>
+                        </tr>
+                        <!-- Bag 17 -->
+                        <tr>
+                            <td data-label="ID">SW1000000033</td>
+                            <td data-label="Bag Number">17</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">53.2</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[RL, A12, B18]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000034</td>
+                            <td data-label="Bag Number">17</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">53.2</td>
+                            <td data-label="Action">Bag placed in storage compartment RL2</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[RL2, A12, B18]</td>
+                        </tr>
+                        <!-- Bag 18 -->
+                        <tr>
+                            <td data-label="ID">SW1000000035</td>
+                            <td data-label="Bag Number">18</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">49.8</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RL, A12, B19]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000036</td>
+                            <td data-label="Bag Number">18</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">49.8</td>
+                            <td data-label="Action">Bag placed in storage compartment RL3</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RL3, A12, B19]</td>
+                        </tr>
+                        <!-- Bag 19 -->
+                        <tr>
+                            <td data-label="ID">SW1000000037</td>
+                            <td data-label="Bag Number">19</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">44.0</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RL, A13, B20]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000038</td>
+                            <td data-label="Bag Number">19</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">44.0</td>
+                            <td data-label="Action">Bag placed in storage compartment RL4</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RL4, A13, B20]</td>
+                        </tr>
+                        <!-- Bag 20 -->
+                        <tr>
+                            <td data-label="ID">SW1000000039</td>
+                            <td data-label="Bag Number">20</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">51.2</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[RL, A14, B21]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000040</td>
+                            <td data-label="Bag Number">20</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">51.2</td>
+                            <td data-label="Action">Bag placed in storage compartment RL5</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[RL5, A14, B21]</td>
+                        </tr>
+                        
+                        <!-- Sector: Rear Center (RC) -->
+                        <!-- Bag 21 -->
+                        <tr>
+                            <td data-label="ID">SW1000000041</td>
+                            <td data-label="Bag Number">21</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">48.5</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RC, A15, B22]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000042</td>
+                            <td data-label="Bag Number">21</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">48.5</td>
+                            <td data-label="Action">Bag placed in storage compartment RC1</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RC1, A15, B22]</td>
+                        </tr>
+                        <!-- Bag 22 -->
+                        <tr>
+                            <td data-label="ID">SW1000000043</td>
+                            <td data-label="Bag Number">22</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">54.0</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[RC, A16, B23]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000044</td>
+                            <td data-label="Bag Number">22</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">54.0</td>
+                            <td data-label="Action">Bag placed in storage compartment RC2</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[RC2, A16, B23]</td>
+                        </tr>
+                        <!-- Bag 23 -->
+                        <tr>
+                            <td data-label="ID">SW1000000045</td>
+                            <td data-label="Bag Number">23</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">43.7</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RC, A16, B24]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000046</td>
+                            <td data-label="Bag Number">23</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">43.7</td>
+                            <td data-label="Action">Bag placed in storage compartment RC3</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RC3, A16, B24]</td>
+                        </tr>
+                        <!-- Bag 24 -->
+                        <tr>
+                            <td data-label="ID">SW1000000047</td>
+                            <td data-label="Bag Number">24</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">56.1</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[RC, A17, B25]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000048</td>
+                            <td data-label="Bag Number">24</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">56.1</td>
+                            <td data-label="Action">Bag placed in storage compartment RC4</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[RC4, A17, B25]</td>
+                        </tr>
+                        <!-- Bag 25 -->
+                        <tr>
+                            <td data-label="ID">SW1000000049</td>
+                            <td data-label="Bag Number">25</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">50.5</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RC, A18, B26]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000050</td>
+                            <td data-label="Bag Number">25</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">50.5</td>
+                            <td data-label="Action">Bag placed in storage compartment RC5</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RC5, A18, B26]</td>
+                        </tr>
+                        
+                        <!-- Sector: Rear Right (RR) -->
+                        <!-- Bag 26 -->
+                        <tr>
+                            <td data-label="ID">SW1000000051</td>
+                            <td data-label="Bag Number">26</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">49.4</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RR, A19, B27]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000052</td>
+                            <td data-label="Bag Number">26</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">49.4</td>
+                            <td data-label="Action">Bag placed in storage compartment RR1</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RR1, A19, B27]</td>
+                        </tr>
+                        <!-- Bag 27 -->
+                        <tr>
+                            <td data-label="ID">SW1000000053</td>
+                            <td data-label="Bag Number">27</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">55.8</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[RR, A20, B28]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000054</td>
+                            <td data-label="Bag Number">27</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">55.8</td>
+                            <td data-label="Action">Bag placed in storage compartment RR2</td>
+                            <td data-label="Fragile/Oversized">Fragile</td>
+                            <td data-label="Location Array">[RR2, A20, B28]</td>
+                        </tr>
+                        <!-- Bag 28 -->
+                        <tr>
+                            <td data-label="ID">SW1000000055</td>
+                            <td data-label="Bag Number">28</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">44.2</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RR, A21, B29]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000056</td>
+                            <td data-label="Bag Number">28</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">44.2</td>
+                            <td data-label="Action">Bag placed in storage compartment RR3</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RR3, A21, B29]</td>
+                        </tr>
+                        <!-- Bag 29 -->
+                        <tr>
+                            <td data-label="ID">SW1000000057</td>
+                            <td data-label="Bag Number">29</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">57.0</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[RR, A22, B30]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000058</td>
+                            <td data-label="Bag Number">29</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">57.0</td>
+                            <td data-label="Action">Bag placed in storage compartment RR4</td>
+                            <td data-label="Fragile/Oversized">Oversized</td>
+                            <td data-label="Location Array">[RR4, A22, B30]</td>
+                        </tr>
+                        <!-- Bag 30 -->
+                        <tr>
+                            <td data-label="ID">SW1000000059</td>
+                            <td data-label="Bag Number">30</td>
+                            <td data-label="Status">Picked Up</td>
+                            <td data-label="Weight (lbs)">53.6</td>
+                            <td data-label="Action">Bag picked up from conveyor belt</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RR, A23, B31]</td>
+                        </tr>
+                        <tr>
+                            <td data-label="ID">SW1000000060</td>
+                            <td data-label="Bag Number">30</td>
+                            <td data-label="Status">Dropped Off</td>
+                            <td data-label="Weight (lbs)">53.6</td>
+                            <td data-label="Action">Bag placed in storage compartment RR5</td>
+                            <td data-label="Fragile/Oversized">No</td>
+                            <td data-label="Location Array">[RR5, A23, B31]</td>
+                        </tr>
+                        
+                        <!-- Repeat similar structure for other sectors (FL, FC, FR, RL, RC, RR) up to Bag 120 -->
+                        <!-- Ensure IDs follow the SW RFID format -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 LugBot. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Optional JavaScript for Future Functionality -->
+    <script>
+        // Placeholder for future search functionality.
+        // Currently, the search button is disabled to indicate that the feature is not yet implemented.
+    </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports - LugBot</title>
+    <!-- Link to CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts and Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js" defer></script>
+    <!-- Include reports.js for additional functionalities (if any) -->
+    <script src="reports.js" defer></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="Logo" class="logo">
+            <h2>LugBot</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+            <li><a href="robot_control.html"><i class="fas fa-robot"></i>Robot Control</a></li>
+            <li><a href="bag_placement.html"><i class="fas fa-box"></i>Bag Placement</a></li>
+            <li><a href="reports.html" class="active"><i class="fas fa-chart-bar"></i>Reports</a></li>
+            <li><a href="maintenance.html"><i class="fas fa-tools"></i>Maintenance</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header>
+            <div class="header-title">
+                <h1>Reports</h1>
+            </div>
+            <div class="user-profile">
+                <img src="user-avatar.png" alt="User Avatar" class="avatar">
+                <span>John Doe</span>
+            </div>
+        </header>
+
+        <!-- Reports Content -->
+        <div class="content">
+            <!-- Report Summary -->
+            <div class="report-summary">
+                <h2>Bag Summary</h2>
+                <p><strong>Total Bags Processed:</strong> <span id="total-bags">120</span></p>
+                <p><strong>Total Weight:</strong> <span id="total-weight">6,250</span> lbs</p>
+            </div>
+
+            <!-- Weight Distribution Chart -->
+            <div class="chart-container">
+                <h2>Weight Distribution</h2>
+                <canvas id="weightDistributionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 LugBot. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript to Populate Data and Render Charts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Updated Data for 120 Bags
+            const totalBags = 120;
+            const totalWeight = 6250; // Total weight in lbs
+
+            // Define Sectors Based on Bag Processing Logs
+            const sectors = [
+                { label: '0-25 lbs', range: '0-25', count: 30 },
+                { label: '26-50 lbs', range: '26-50', count: 40 },
+                { label: '51-75 lbs', range: '51-75', count: 25 },
+                { label: '76-100 lbs', range: '76-100', count: 15 },
+                { label: '101+ lbs', range: '101+', count: 10 }
+            ];
+
+            // Calculate the sum of counts to ensure data integrity
+            const sumCounts = sectors.reduce((sum, sector) => sum + sector.count, 0);
+            if (sumCounts !== totalBags) {
+                console.warn(`Sum of sector counts (${sumCounts}) does not match total bags (${totalBags}). Adjusting counts proportionally.`);
+                const adjustmentFactor = totalBags / sumCounts;
+                sectors.forEach(sector => {
+                    sector.count = Math.round(sector.count * adjustmentFactor);
+                });
+            }
+
+            // Generate Labels and Data for Chart
+            const labels = sectors.map(sector => sector.label);
+            const data = sectors.map(sector => sector.count);
+
+            // Generate Colors Dynamically
+            const backgroundColors = [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(153, 102, 255, 0.6)'
+            ];
+
+            const borderColors = [
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(153, 102, 255, 1)'
+            ];
+
+            // Update Summary Data
+            document.getElementById('total-bags').textContent = totalBags.toLocaleString();
+            document.getElementById('total-weight').textContent = totalWeight.toLocaleString();
+
+            // Render Weight Distribution Chart
+            const ctx = document.getElementById('weightDistributionChart').getContext('2d');
+            const weightDistributionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Number of Bags',
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: 'Weight Distribution of Bags'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Bags'
+                            },
+                            ticks: {
+                                stepSize: 10 // Adjust step size as needed
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Weight Range (lbs)'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
