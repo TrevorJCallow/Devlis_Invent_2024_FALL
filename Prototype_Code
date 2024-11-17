@@ -1,0 +1,100 @@
+#include <IRremote.h>
+
+// Define IR receiver pin
+#define IR_PIN 11
+
+// Motor A connections
+const int enA = 9;  // Motor A speed control (PWM)
+const int in1 = 8;  // Motor A input 1
+const int in2 = 7;  // Motor A input 2
+
+// Motor B connections
+const int enB = 3;  // Motor B speed control (PWM)
+const int in3 = 5;  // Motor B input 1
+const int in4 = 4;  // Motor B input 2
+
+// Define LED pin for feedback (optional)
+const int LED_PIN = 12;  // Optional, for feedback
+
+// IRremote instance
+IRrecv irrecv(IR_PIN);
+
+bool motorsRunning = false; // Track if motors are running
+
+void setup() {
+  // Initialize motor control pins as outputs
+  pinMode(enA, OUTPUT);
+  pinMode(enB, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+
+  // Initialize the LED pin as output (optional for feedback)
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW); // Start with LED off
+
+  // Initialize serial communication for debugging
+  Serial.begin(9600);
+
+  // Start IR receiver
+  irrecv.enableIRIn();
+
+  Serial.println(F("IRremote Initialized. Waiting for signals..."));
+}
+
+void loop() {
+  // Check if IR data is available
+  if (irrecv.decode()) {
+    unsigned long value = irrecv.decodedIRData.decodedRawData;
+    // Print the received IR command for debugging
+    Serial.print("Received IR command: ");
+    Serial.println(value, HEX);
+
+    // Check if the received command is 1 (start motor) or 2 (stop motor)
+    if (value == 0xF30CFF00) { // Command 1 - Start motors
+      if (!motorsRunning) {
+        startMotors();
+        motorsRunning = true;
+      }
+    } else if (value == 0xE718FF00) { // Command 2 - Stop motors
+
+
+      if (motorsRunning) {
+        stopMotors();
+        motorsRunning = false;
+      }
+    }
+
+    // Resume receiving IR signals
+    irrecv.resume();
+  }
+}
+
+// Function to start the motors
+void startMotors() {
+  // Turn on motors
+  digitalWrite(in1, HIGH);  // Motor A forward
+  digitalWrite(in2, LOW);   // Motor A forward
+  digitalWrite(in3, HIGH);  // Motor B forward
+  digitalWrite(in4, LOW);   // Motor B forward
+
+  // Set motors to maximum speed (255)
+  analogWrite(enA, 255);
+  analogWrite(enB, 255);
+
+  // Turn on the LED for feedback
+  digitalWrite(LED_PIN, HIGH);
+}
+
+// Function to stop the motors
+void stopMotors() {
+  // Turn off motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+
+  // Turn off the LED
+  digitalWrite(LED_PIN, LOW);
+}
